@@ -82,8 +82,7 @@ DROP TABLE IF EXISTS `builds`;
 CREATE TABLE `builds` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int unsigned NOT NULL,
-  `name` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `name` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_builds_user` (`user_id`),
   CONSTRAINT `builds_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
@@ -96,7 +95,7 @@ CREATE TABLE `builds` (
 
 LOCK TABLES `builds` WRITE;
 /*!40000 ALTER TABLE `builds` DISABLE KEYS */;
-INSERT INTO `builds` VALUES (1,3,'Стартовый самурай','2026-10-05 06:28:01');
+INSERT INTO `builds` VALUES (1,3,'Стартовый самурай');
 /*!40000 ALTER TABLE `builds` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -136,7 +135,7 @@ DROP TABLE IF EXISTS `creature_types`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `creature_types` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL,
   `role` enum('npc','enemy') COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
@@ -162,7 +161,7 @@ DROP TABLE IF EXISTS `creatures`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `creatures` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL,
   `type_id` int unsigned NOT NULL,
   `description` text COLLATE utf8mb4_unicode_ci,
   `tactics` text COLLATE utf8mb4_unicode_ci,
@@ -249,7 +248,7 @@ DROP TABLE IF EXISTS `item_types`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `item_types` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL,
   `category` enum('weapon','shield','armor','talisman','spell','material') COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_type` (`category`,`name`)
@@ -275,7 +274,7 @@ DROP TABLE IF EXISTS `items`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `items` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL,
   `type_id` int unsigned NOT NULL,
   `weight` decimal(5,1) NOT NULL DEFAULT '0.0',
   `damage_type_id` smallint unsigned DEFAULT NULL,
@@ -314,7 +313,7 @@ DROP TABLE IF EXISTS `locations`;
 CREATE TABLE `locations` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `region_id` int unsigned NOT NULL,
-  `name` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` text COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_location` (`region_id`,`name`),
@@ -343,7 +342,7 @@ CREATE TABLE `mechanics` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `tutorial_id` int unsigned NOT NULL,
   `stat_id` smallint unsigned DEFAULT NULL,
-  `name` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` text COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_mech` (`tutorial_id`,`name`),
@@ -372,7 +371,7 @@ DROP TABLE IF EXISTS `regions`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `regions` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -422,7 +421,7 @@ DROP TABLE IF EXISTS `skills`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `skills` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` text COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
@@ -448,7 +447,7 @@ DROP TABLE IF EXISTS `stats`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `stats` (
   `id` smallint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL,
   `kind` enum('attribute','damage','resistance','other') COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` text COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`id`),
@@ -475,7 +474,7 @@ DROP TABLE IF EXISTS `tutorials`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tutorials` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` text COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
@@ -502,7 +501,7 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `login` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password_hash` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `role_id` tinyint unsigned NOT NULL DEFAULT '1',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
@@ -704,4 +703,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-10-05 11:28:48
+-- Dump completed on 2026-10-05 12:36:26
