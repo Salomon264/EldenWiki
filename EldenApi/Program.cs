@@ -18,9 +18,32 @@ builder.Services.AddScoped<JwtTokenService>();
 
 // Аутентификация по JWT-токену (Bearer). Ключ подписи берётся из секции "Jwt"
 // или из переменной окружения Jwt__Key.
-var jwtKey = builder.Configuration["Jwt:Key"]
-    ?? throw new InvalidOperationException(
-        "Не задан ключ подписи JWT (Jwt:Key или переменная окружения Jwt__Key).");
+// В Development допускается встроенный ключ, чтобы проект запускался без настроек.
+// В Production ключ обязателен: без него приложение не стартует.
+const string devFallbackJwtKey = "dev-only-insecure-signing-key-change-me-0123456789";
+
+var isDevFallbackJwtKey = false;
+var jwtKey = builder.Configuration["Jwt:Key"];
+
+if (string.IsNullOrWhiteSpace(jwtKey))
+{
+    if (!builder.Environment.IsDevelopment())
+    {
+        throw new InvalidOperationException(
+            "Не задан ключ подписи JWT (Jwt:Key). Задайте переменную окружения Jwt__Key — "
+            + "например, создайте файл .env со строкой JWT_KEY=... (см. .env.example) "
+            + "или запустите стек командой 'docker compose up -d --build' из корня репозитория.");
+    }
+
+    jwtKey = devFallbackJwtKey;
+    isDevFallbackJwtKey = true;
+
+    // Значение доступно и JwtTokenService, и валидатору Bearer.
+    builder.Configuration.AddInMemoryCollection(new Dictionary<string, string?>
+    {
+        ["Jwt:Key"] = jwtKey
+    });
+}
 
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -45,6 +68,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+if (isDevFallbackJwtKey)
+{
+    app.Logger.LogWarning(
+        "Ключ JWT не задан — используется встроенный dev-ключ. "
+        + "Задайте Jwt__Key (см. .env.example) перед деплоем.");
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
