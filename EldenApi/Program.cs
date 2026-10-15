@@ -18,16 +18,22 @@ builder.Services.AddScoped<JwtTokenService>();
 
 // Аутентификация по JWT-токену (Bearer). Ключ подписи берётся из секции "Jwt"
 // или из переменной окружения Jwt__Key.
-// В Development допускается встроенный ключ, чтобы проект запускался без настроек.
-// В Production ключ обязателен: без него приложение не стартует.
+// Встроенный dev-ключ допускается, если окружение не задано явно (локальный запуск,
+// docker run) либо задан Development — чтобы проект поднимался без настроек.
+// При явном Production/Staging ключ обязателен: без него приложение не стартует.
 const string devFallbackJwtKey = "dev-only-insecure-signing-key-change-me-0123456789";
+
+var configuredEnvironment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+var isStrictEnvironment =
+    string.Equals(configuredEnvironment, "Production", StringComparison.OrdinalIgnoreCase)
+    || string.Equals(configuredEnvironment, "Staging", StringComparison.OrdinalIgnoreCase);
 
 var isDevFallbackJwtKey = false;
 var jwtKey = builder.Configuration["Jwt:Key"];
 
 if (string.IsNullOrWhiteSpace(jwtKey))
 {
-    if (!builder.Environment.IsDevelopment())
+    if (isStrictEnvironment)
     {
         throw new InvalidOperationException(
             "Не задан ключ подписи JWT (Jwt:Key). Задайте переменную окружения Jwt__Key — "
