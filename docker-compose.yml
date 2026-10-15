@@ -3,7 +3,7 @@ services:
     image: mysql:9
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: AlikGumerov8g
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-AlikGumerov8g}
       MYSQL_DATABASE: eldenwiki
     ports:
       # Внешний порт 3307, чтобы не конфликтовать с локальным MySQL на 3306.
@@ -30,7 +30,12 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_HTTP_PORTS: 8080
-      ConnectionStrings__Default: "server=db;port=3306;database=eldenwiki;user=root;password=AlikGumerov8g"
+      ConnectionStrings__Default: "server=db;port=3306;database=eldenwiki;user=root;password=${MYSQL_ROOT_PASSWORD:-AlikGumerov8g}"
+      # Ключ подписи JWT. Переопределяется через .env (переменная JWT_KEY).
+      Jwt__Key: ${JWT_KEY:-dev-only-insecure-signing-key-change-me-0123456789}
+      Jwt__Issuer: EldenWiki
+      Jwt__Audience: EldenWiki
+      Jwt__LifetimeMinutes: "120"
     ports:
       - "8080:8080"
 
