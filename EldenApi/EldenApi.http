@@ -1,0 +1,6 @@
+@EldenApi_HostAddress = http://localhost:5072
+
+GET {{EldenApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,19 @@
+# Build results
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+# Visual Studio / VS Code / Rider
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+
+# macOS
+.DS_Store
+
+# Local secrets / environment overrides
+*.env
+.env
+appsettings.Local.json
