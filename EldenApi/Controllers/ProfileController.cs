@@ -6,14 +6,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EldenApi.Controllers;
 
-/// <summary>
-/// Профиль пользователя: просмотр и редактирование.
-/// </summary>
 [ApiController]
 [Route("api/profile")]
 public class ProfileController(EldenwikiContext db) : ControllerBase
 {
-    /// <summary>Просмотр профиля по идентификатору пользователя.</summary>
     [HttpGet("{id}")]
     public async Task<ActionResult<ProfileDto>> GetProfile(uint id)
     {
@@ -37,7 +33,6 @@ public class ProfileController(EldenwikiContext db) : ControllerBase
         return Ok(profile);
     }
 
-    /// <summary>Редактирование профиля (пароль меняется только если он указан).</summary>
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateProfile(uint id, UpdateProfileDto dto)
     {

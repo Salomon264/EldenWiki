@@ -6,11 +6,6 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace EldenApi.Services;
 
-/// <summary>
-/// Генерирует JWT-токены для аутентифицированных пользователей.
-/// Параметры берутся из секции конфигурации "Jwt"
-/// (ключ можно переопределить переменной окружения Jwt__Key).
-/// </summary>
 public class JwtTokenService(IConfiguration configuration)
 {
     public const string DefaultIssuer = "EldenWiki";

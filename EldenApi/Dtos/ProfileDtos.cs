@@ -1,6 +1,5 @@
 namespace EldenApi.Dtos;
 
-/// <summary>Информация о профиле пользователя.</summary>
 public record ProfileDto(
     uint Id,
     string Login,
@@ -9,7 +8,6 @@ public record ProfileDto(
     DateTime CreatedAt,
     int BuildsCount);
 
-/// <summary>Данные для редактирования профиля (пароль меняется только если указан).</summary>
 public record UpdateProfileDto(
     string Login,
     string? NewPassword);

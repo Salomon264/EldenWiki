@@ -5,18 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EldenApi.Controllers;
 
-/// <summary>
-/// Статьи (предметы) вики: просмотр списка с фильтром по категории,
-/// просмотр одной статьи, редактирование и удаление.
-/// </summary>
 [ApiController]
 [Route("api/articles")]
 public class ArticlesController(EldenwikiContext db) : ControllerBase
 {
-    /// <summary>Список статей с фильтром по категории, типу предмета и поиском по названию.</summary>
-    /// <param name="category">Категория предмета: weapon, shield, armor, talisman, spell, material.</param>
-    /// <param name="typeId">Идентификатор конкретного типа предмета.</param>
-    /// <param name="search">Подстрока для поиска по названию.</param>
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ArticleListItemDto>>> GetArticles(
         [FromQuery] string? category,
@@ -53,7 +45,6 @@ public class ArticlesController(EldenwikiContext db) : ControllerBase
         return Ok(articles);
     }
 
-    /// <summary>Список категорий с количеством статей в каждой.</summary>
     [HttpGet("categories")]
     public async Task<ActionResult<IEnumerable<CategorySummaryDto>>> GetCategories()
     {
@@ -66,7 +57,6 @@ public class ArticlesController(EldenwikiContext db) : ControllerBase
         return Ok(categories);
     }
 
-    /// <summary>Получить статью по идентификатору.</summary>
     [HttpGet("{id}")]
     public async Task<ActionResult<ArticleDto>> GetArticle(uint id)
     {
@@ -96,7 +86,6 @@ public class ArticlesController(EldenwikiContext db) : ControllerBase
         return Ok(article);
     }
 
-    /// <summary>Отредактировать статью.</summary>
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateArticle(uint id, UpdateArticleDto dto)
     {
@@ -144,7 +133,6 @@ public class ArticlesController(EldenwikiContext db) : ControllerBase
         return NoContent();
     }
 
-    /// <summary>Удалить статью.</summary>
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteArticle(uint id)
     {

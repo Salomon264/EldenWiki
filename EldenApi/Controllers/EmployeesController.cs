@@ -6,14 +6,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EldenApi.Controllers;
 
-/// <summary>
-/// Сотрудники (пользователи системы): добавление, редактирование и удаление.
-/// </summary>
 [ApiController]
 [Route("api/employees")]
 public class EmployeesController(EldenwikiContext db) : ControllerBase
 {
-    /// <summary>Список сотрудников.</summary>
     [HttpGet]
     public async Task<ActionResult<IEnumerable<EmployeeListItemDto>>> GetEmployees()
     {
@@ -31,7 +27,6 @@ public class EmployeesController(EldenwikiContext db) : ControllerBase
         return Ok(employees);
     }
 
-    /// <summary>Получить сотрудника по идентификатору.</summary>
     [HttpGet("{id}")]
     public async Task<ActionResult<EmployeeDto>> GetEmployee(uint id)
     {
@@ -54,7 +49,6 @@ public class EmployeesController(EldenwikiContext db) : ControllerBase
         return Ok(employee);
     }
 
-    /// <summary>Добавить сотрудника.</summary>
     [HttpPost]
     public async Task<ActionResult<EmployeeDto>> CreateEmployee(CreateEmployeeDto dto)
     {
@@ -99,7 +93,6 @@ public class EmployeesController(EldenwikiContext db) : ControllerBase
         return CreatedAtAction(nameof(GetEmployee), new { id = user.Id }, result);
     }
 
-    /// <summary>Отредактировать сотрудника (пароль меняется только если он указан).</summary>
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateEmployee(uint id, UpdateEmployeeDto dto)
     {
@@ -137,7 +130,6 @@ public class EmployeesController(EldenwikiContext db) : ControllerBase
         return NoContent();
     }
 
-    /// <summary>Удалить сотрудника.</summary>
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteEmployee(uint id)
     {
